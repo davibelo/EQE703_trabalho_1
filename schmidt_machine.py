@@ -21,12 +21,13 @@ def schmidt_machine(W):
     for i in range(1, n):
         # Start with Wi
         Pi = W[:, i]
-        
+
         # Subtract the projections of Wi onto all previous Pj (j < i)
         for j in range(i):
-            alpha = -(P[:, j].T @ W[:, i]) / (P[:, j].T @ P[:, j])
-            Pi += alpha * P[:, j]
-        
+            Pj = P[:, j]
+            alpha = -(Pj.T @ W[:, i]) / (Pj.T @ Pj)
+            Pi += alpha * Pj
+
         # Set the calculated Pi into the ith column of P
         P[:, i] = Pi
 
@@ -36,11 +37,21 @@ W = np.array([[1, 1, 0],
               [0, 1, 1],
               [1, 0, 1]])
 
-P_correct = np.array([[1, 1, 0],
-                      [0, 1, 1],
-                      [1, 0, 1]])
-
-print(W)
+P_correct = np.array([[1,  0.5, -2/3],
+                      [0,    1,  2/3],
+                      [1, -0.5,  2/3]])
 
 P = schmidt_machine(W)
+
+print("W:")
+print(W)
+print("\nP:")
 print(P)
+print("\nP_correct:")
+print(P_correct)
+
+# Compare P with P_correct
+if np.allclose(P, P_correct):
+    print("\nP is equal to P_correct")
+else:
+    print("\nP is not equal to P_correct")
