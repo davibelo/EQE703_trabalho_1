@@ -18,18 +18,19 @@ def schmidt_machine(W):
     P[:, 0] = P0
 
     # Loop to calculate P1, P2, ..., Pn-1
-    for i in range(1, n):
-        # Start with Wi
-        Pi = W[:, i]
+    for k in range(1, n):
+        # Start with Wk
+        Pk = W[:, k]
 
-        # Subtract the projections of Wi onto all previous Pj (j < i)
-        for j in range(i):
-            Pj = P[:, j]
-            alpha = -(Pj.T @ W[:, i]) / (Pj.T @ Pj)
-            Pi += alpha * Pj
+        # Subtract the projections of Wk onto all previous Pi (i < k)
+        for i in range(k):
+            Pi = P[:, i]
+            Wk = W[:, k]
+            alpha = -(Pi.T @ Wk) / (Pi.T @ Pi)
+            Pk += alpha * Pi
 
         # Set the calculated Pi into the ith column of P
-        P[:, i] = Pi
+        P[:, k] = Pk
 
     return P
 
