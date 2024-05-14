@@ -32,13 +32,17 @@ def schmidt_machine(W):
 
     return P
 
-W = np.array([[2, 1, 0],
-              [1, 3, 0],
-              [3, 4, 1]])
+W = np.array([[1, 0, 0],
+              [0, 1, 0],
+              [0, 0, 1]])
 
-print('W=', W)
+P = np.array([[0, 1, 0],
+              [0, 0, 1],
+              [1, 0, 0]])
 
-P = schmidt_machine(W)
-print('P=', P)
+print(W)
+
+# P = schmidt_machine(W)
+print(P)
 
 print(W.T @ P)
