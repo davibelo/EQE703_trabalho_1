@@ -2,7 +2,7 @@ import numpy as np
 
 
 def schmidt_machine(W):
-    """Applies the Schmidt process to matrix A to orthogonalize its columns."""
+    """Applies the Schmidt process to matrix A to orthogonalize its columns vectors."""
 
     # Grant elements as float
     W = W.astype(float)
@@ -17,18 +17,18 @@ def schmidt_machine(W):
     P0 = W[:, 0]
     P[:, 0] = P0
 
-    # Calculate P1
-    W1 = W[:, 1]
-    alfa10 = -(P0.T @ W1) / (P0.T @ P0)
-    P1 = W1 + alfa10 * P0
-    P[:, 1] = P1
-
-    # Calculate P2
-    W2 = W[:, 2]
-    alfa20 = -(P0.T @ W2) / (P0.T @ P0)
-    alfa21 = -(P1.T @ W2) / (P1.T @ P1)
-    P2 = W2 + alfa20 * P0 + alfa21 * P1
-    P[:, 2] = P2
+    # Loop to calculate P1, P2, ..., Pn-1
+    for i in range(1, n):
+        # Start with Wi
+        Pi = W[:, i]
+        
+        # Subtract the projections of Wi onto all previous Pj (j < i)
+        for j in range(i):
+            alpha = -(P[:, j].T @ W[:, i]) / (P[:, j].T @ P[:, j])
+            Pi += alpha * P[:, j]
+        
+        # Set the calculated Pi into the ith column of P
+        P[:, i] = Pi
 
     return P
 
