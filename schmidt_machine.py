@@ -32,17 +32,15 @@ def schmidt_machine(W):
 
     return P
 
-W = np.array([[1, 0, 0],
-              [0, 1, 0],
-              [0, 0, 1]])
+W = np.array([[1, 1, 0],
+              [0, 1, 1],
+              [1, 0, 1]])
 
-P = np.array([[0, 1, 0],
-              [0, 0, 1],
-              [1, 0, 0]])
+P_correct = np.array([[1, 1, 0],
+                      [0, 1, 1],
+                      [1, 0, 1]])
 
 print(W)
 
-# P = schmidt_machine(W)
+P = schmidt_machine(W)
 print(P)
-
-print(W.T @ P)
