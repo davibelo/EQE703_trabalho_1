@@ -32,21 +32,27 @@ def schmidt_machine(W):
         # Set the calculated Pi into the ith column of P
         P[:, k] = Pk
 
+    for i in range(P.shape[1]):  # Iterate over columns
+        vector = P[:, i]
+        norm = np.linalg.norm(vector)
+        if norm != 0:
+            P[:, i] = vector / norm
+
     return P
 
-W = np.array([[1, 1, 0],
-              [0, 1, 1],
-              [1, 0, 1]])
+W = np.array([[12, -51,   4],
+              [ 6, 167, -68],
+              [-4,  24, -41]])
 
-P_correct = np.array([[1,  0.5, -2/3],
-                      [0,    1,  2/3],
-                      [1, -0.5,  2/3]])
+P_correct = np.array([[ 6/7, -69/175, -58/175],
+                      [ 3/7, 158/175,   6/175],
+                      [-2/7,    6/35,  -33/35]])
 
 P = schmidt_machine(W)
 
-print("W:")
+print("W = ")
 print(W)
-print("\nP:")
+print("\nP = ")
 print(P)
 print("\nP_correct:")
 print(P_correct)
@@ -56,3 +62,7 @@ if np.allclose(P, P_correct):
     print("\nP is equal to P_correct")
 else:
     print("\nP is not equal to P_correct")
+
+D = P.T @ (W @ P)
+print('D = ')
+print(D)
