@@ -182,6 +182,7 @@ def determinant_with_pivoting(matrix):
 
     Returns:
     float or None: The determinant of the matrix. Returns None if the matrix is not square.
+    2D numpy array: The triangular matrix produced by the method
 
     Raises:
     ValueError: If the input matrix is not square or not a 2D numpy array.
@@ -231,7 +232,7 @@ def determinant_with_pivoting(matrix):
         # Multiply the diagonal elements to get determinant
         det *= pivot
 
-    return det
+    return det, matrix
 
 @execution_time_decorator
 def determinant_with_numpy(matrix):
