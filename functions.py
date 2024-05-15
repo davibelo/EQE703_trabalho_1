@@ -1,5 +1,19 @@
 import numpy as np
+import pandas as pd
+from IPython.display import display
 
+def display_array_as_dataframe(array):
+    """
+    Display a NumPy array as a pandas DataFrame.
+
+    Parameters:
+    array (numpy.ndarray): The NumPy array to be displayed.
+    """
+    # Create a DataFrame from the NumPy array
+    df = pd.DataFrame(array)
+
+    # Display the DataFrame
+    display(df)
 
 def schmidt_machine(W, M=None):
     """
@@ -62,7 +76,6 @@ def schmidt_machine(W, M=None):
 
     return P
 
-
 def are_columns_orthogonal(matrix, tolerance=1e-10):
     """
     Checks if the columns of the given matrix are orthogonal to each other within a specified tolerance.
@@ -91,7 +104,7 @@ def are_columns_orthogonal(matrix, tolerance=1e-10):
 
     return True
 
-def set_zero_if_below_tolerance(array, tolerance=1E-10):
+def set_zero_if_below_tolerance(array, tolerance=1E-5):
     """
     Sets elements of a 2D NumPy array to zero if they are below a specified tolerance.
 
@@ -109,3 +122,39 @@ def set_zero_if_below_tolerance(array, tolerance=1E-10):
     array[array < tolerance] = 0
 
     return array
+
+def classify_diagonal(matrix):
+    """
+    Classifies the diagonal elements of a 2D NumPy array according to the following rules:
+    - PD: all elements are positive
+    - PSD: all elements are zero or positive
+    - ND: all elements are negative
+    - NSD: all elements are zero or negative
+    - INDEF: array has positive, negative and zeros
+    
+    Args:
+    matrix (np.ndarray): A 2D NumPy array.
+
+    Returns:
+    str: The classification of the diagonal elements.
+    """
+
+    if not isinstance(matrix, np.ndarray) or matrix.ndim != 2:
+        raise ValueError("Input must be a 2D NumPy array")
+
+    diagonal = np.diag(matrix)
+
+    has_positive = np.any(diagonal > 0)
+    has_negative = np.any(diagonal < 0)
+    has_zero = np.any(diagonal == 0)
+
+    if has_positive and not has_negative and not has_zero:
+        return "PD"
+    elif has_positive and not has_negative and has_zero:
+        return "PSD"
+    elif not has_positive and has_negative and not has_zero:
+        return "ND"
+    elif not has_positive and has_negative and has_zero:
+        return "NSD"
+    else:
+        return "INDEF"
