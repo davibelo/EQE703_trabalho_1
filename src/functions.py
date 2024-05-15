@@ -210,6 +210,7 @@ def determinant_with_pivoting(matrix):
         for i in range(j + 1, rows):
             # factor = target element to transform in zero / pivot
             factor = -(matrix[i, j] / pivot)
+            # add (factor * pivot line) to target line
             matrix[i, j:] += factor * matrix[j, j:]
 
         # Multiply the diagonal elements to get determinant
