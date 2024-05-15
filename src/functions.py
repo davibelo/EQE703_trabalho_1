@@ -1,6 +1,17 @@
 import numpy as np
 import pandas as pd
 from IPython.display import display
+import time
+
+def execution_time_decorator(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.perf_counter_ns()
+        result = func(*args, **kwargs)
+        end_time = time.perf_counter_ns()
+        execution_time = end_time - start_time
+        print(f"Execution Time for {func.__name__}: {execution_time} nanoseconds")
+        return result
+    return wrapper
 
 def display_array_as_dataframe(array):
     """
@@ -15,6 +26,7 @@ def display_array_as_dataframe(array):
     # Display the DataFrame
     display(df)
 
+@execution_time_decorator
 def schmidt_machine(W, M=None):
     """
     Applies the Schmidt process to a matrix W to orthogonalize its column vectors
@@ -160,7 +172,7 @@ def classify_diagonal(matrix):
     else:
         return "INDEF"
 
-
+@execution_time_decorator
 def determinant_with_pivoting(matrix):
     """
     Calculate the determinant of a square matrix using the pivoting method.
@@ -210,10 +222,17 @@ def determinant_with_pivoting(matrix):
         for i in range(j + 1, rows):
             # factor = target element to transform in zero / pivot
             factor = -(matrix[i, j] / pivot)
-            # add (factor * pivot line) to target line
+            # add (factor * pivot line) target line
+            # it can ignore left of the pivot because elements are already zero
+            # line is i and columns from j to the end
+            # the adding is done element wise
             matrix[i, j:] += factor * matrix[j, j:]
 
         # Multiply the diagonal elements to get determinant
         det *= pivot
 
     return det
+
+@execution_time_decorator
+def determinant_with_numpy(matrix):
+    return np.linalg.det(matrix)
