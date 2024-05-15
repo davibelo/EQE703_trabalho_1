@@ -37,7 +37,7 @@ class TestFunctions(unittest.TestCase):
                            [ 3, 2,  0, 0],
                            [-1, 0,  1, 1]])
         expected_det = 6
-        calculated_det = determinant_with_pivoting(matrix)
+        calculated_det, _ = determinant_with_pivoting(matrix)
         self.assertEqual(calculated_det, expected_det)
 
 if __name__ == '__main__':
