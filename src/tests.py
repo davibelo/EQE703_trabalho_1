@@ -29,8 +29,17 @@ class TestFunctions(unittest.TestCase):
                                    [2.3, 0.0, 0.8],
                                    [0.1, 0.0, 1.5]])
 
-        np.testing.assert_array_equal(modified_array_custom, expected_array, 
+        np.testing.assert_array_equal(modified_array_custom, expected_array,
                                       "The modified array is not as expected")
+    def test_determinant_calculation(self):
+        matrix = np.array([[ 1, 2,  0, 1],
+                           [ 2, 4, -1, 0],
+                           [ 3, 2,  0, 0],
+                           [-1, 0,  1, 1]])
+        expected_det = 6
+        calculated_det = determinant_with_pivoting(matrix)
+        self.assertEqual(calculated_det, expected_det)
 
 if __name__ == '__main__':
+
     unittest.main()

@@ -159,3 +159,60 @@ def classify_diagonal(matrix):
         return "NSD"
     else:
         return "INDEF"
+
+
+def determinant_with_pivoting(matrix):
+    """
+    Calculate the determinant of a square matrix using the pivoting method.
+
+    Parameters:
+    matrix (numpy.ndarray): A square matrix.
+
+    Returns:
+    float or None: The determinant of the matrix. Returns None if the matrix is not square.
+
+    Raises:
+    ValueError: If the input matrix is not square or not a 2D numpy array.
+    """
+
+    # Check if the input is a 2D numpy array
+    if not isinstance(matrix, np.ndarray) or matrix.ndim != 2:
+        raise ValueError("Input must be a 2D numpy array.")
+
+    # Check if the matrix is square
+    rows, cols = matrix.shape
+    if rows != cols:
+        raise ValueError("Input matrix must be square.")
+
+    # Grant elements as float
+    matrix = matrix.astype(float)
+
+    # Initialize determinant as 1
+    det = 1
+
+    # Iterating over each column
+    for j in range(cols):
+        pivot = matrix[j, j]
+
+        if pivot == 0:
+            # Find a suitable row below with a non-zero pivot to swap with
+            for k in range(j + 1, rows):
+                if matrix[k, j] != 0:
+                    matrix[[j, k]] = matrix[[k, j]]  # Swap rows
+                    det *= -1  # Changing rows changes the sign of determinant
+                    pivot = matrix[j, j]
+                    break
+            else:
+                # If no suitable row found, determinant is zero
+                return 0
+
+        # Make elements below the pivot zero
+        for i in range(j + 1, rows):
+            # factor = target element to transform in zero / pivot
+            factor = -(matrix[i, j] / pivot)
+            matrix[i, j:] += factor * matrix[j, j:]
+
+        # Multiply the diagonal elements to get determinant
+        det *= pivot
+
+    return det
