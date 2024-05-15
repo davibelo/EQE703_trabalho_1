@@ -8,12 +8,12 @@ def execution_time_decorator(func):
         start_time = time.perf_counter_ns()
         result = func(*args, **kwargs)
         end_time = time.perf_counter_ns()
-        execution_time = end_time - start_time
-        print(f"Execution Time for {func.__name__}: {execution_time} nanoseconds")
+        execution_time = (end_time - start_time) / 1000  # converting nanoseconds to microseconds
+        print(f"Execution Time for {func.__name__}: {execution_time} microseconds")
         return result
     return wrapper
 
-def display_array_as_dataframe(array):
+def display_as_dataframe(array):
     """
     Display a NumPy array as a pandas DataFrame.
 
@@ -116,7 +116,7 @@ def are_columns_orthogonal(matrix, tolerance=1e-10):
 
     return True
 
-def set_zero_if_below_tolerance(array, tolerance=1E-5):
+def set_zero_if_below_tolerance(array, tolerance=1e-5):
     """
     Sets elements of a 2D NumPy array to zero if they are below a specified tolerance.
 
