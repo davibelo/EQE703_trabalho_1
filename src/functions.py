@@ -123,6 +123,7 @@ def set_zero_if_below_tolerance(array, tolerance=1E-5):
 
     return array
 
+
 def classify_diagonal(matrix):
     """
     Classifies the diagonal elements of a 2D NumPy array according to the following rules:

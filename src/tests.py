@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from functions import schmidt_machine, set_zero_if_below_tolerance
+from functions import *
 
 class TestFunctions(unittest.TestCase):
 
