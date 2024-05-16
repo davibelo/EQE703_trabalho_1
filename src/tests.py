@@ -37,8 +37,12 @@ class TestFunctions(unittest.TestCase):
                            [ 3, 2,  0, 0],
                            [-1, 0,  1, 1]])
         expected_det = 6
-        calculated_det, _ = determinant_with_pivoting(matrix)
+        calculated_det, calculated_matrix = determinant_with_pivoting(matrix)
+        # Check the determinant
         self.assertEqual(calculated_det, expected_det)
+        # Check if matrix is upper triangular
+        self.assertTrue(np.all(np.tril(calculated_matrix, -1) == 0))
+
 
 if __name__ == '__main__':
 

@@ -173,12 +173,14 @@ def classify_diagonal(matrix):
         return "INDEF"
 
 @execution_time_decorator
-def determinant_with_pivoting(matrix):
+def determinant_with_pivoting(matrix, tolerance=1E-6):
     """
-    Calculate the determinant of a square matrix using the pivoting method.
+    Calculate the determinant of a square matrix using the pivoting method,
+    considering a tolerance for treating small numbers as zero.
 
     Parameters:
     matrix (numpy.ndarray): A square matrix.
+    tolerance (float): The tolerance level for treating numbers as zero.
 
     Returns:
     float or None: The determinant of the matrix. Returns None if the matrix is not square.
@@ -206,28 +208,29 @@ def determinant_with_pivoting(matrix):
     # Iterating over each column
     for j in range(cols):
         pivot = matrix[j, j]
+        # Consider pivot as zero if below the tolerance
+        if abs(pivot) < tolerance:
+            pivot = 0
 
         if pivot == 0:
             # Find a suitable row below with a non-zero pivot to swap with
             for k in range(j + 1, rows):
-                if matrix[k, j] != 0:
+                if abs(matrix[k, j]) > tolerance:
                     matrix[[j, k]] = matrix[[k, j]]  # Swap rows
                     det *= -1  # Changing rows changes the sign of determinant
                     pivot = matrix[j, j]
                     break
             else:
                 # If no suitable row found, determinant is zero
-                return 0
+                return 0, matrix
 
         # Make elements below the pivot zero
         for i in range(j + 1, rows):
-            # factor = target element to transform in zero / pivot
             factor = -(matrix[i, j] / pivot)
-            # add (factor * pivot line) target line
-            # it can ignore left of the pivot because elements are already zero
-            # line is i and columns from j to the end
-            # the adding is done element wise
             matrix[i, j:] += factor * matrix[j, j:]
+
+            # Set small values to zero based on tolerance
+            matrix[i, j:][abs(matrix[i, j:]) < tolerance] = 0
 
         # Multiply the diagonal elements to get determinant
         det *= pivot
