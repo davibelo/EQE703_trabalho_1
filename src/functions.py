@@ -173,7 +173,7 @@ def classify_diagonal(matrix):
         return "INDEF"
 
 @execution_time_decorator
-def determinant_with_pivoting(matrix, tolerance=1E-10):
+def determinant_with_pivoting(matrix, tolerance=1E-6):
     """
     Calculate the determinant of a square matrix using the pivoting method,
     considering a tolerance for treating small numbers as zero.
