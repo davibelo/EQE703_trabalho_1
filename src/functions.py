@@ -267,7 +267,7 @@ def row_reduced_echelon_form(matrix, tolerance=1E-6):
 
     # Iterating over each column
     rows, cols = matrix.shape
-    for j in range(cols):
+    for j in range(min(rows, cols)):
         # Select the pivot as the largest absolute value for numerical stability
         pivot_index = np.argmax(abs(matrix[j:, j])) + j
         pivot = matrix[pivot_index, j]
@@ -278,14 +278,14 @@ def row_reduced_echelon_form(matrix, tolerance=1E-6):
 
         # Consider pivot as zero if below the tolerance
         if abs(pivot) < tolerance:
-            return matrix
+            continue  # Skip this column if the pivot is too small
 
         # Normalize the pivot row (divide the row by the pivot element)
         matrix[j] = matrix[j] / pivot
 
         # Make elements below the pivot zero
         for i in range(j + 1, rows):
-            factor = matrix[i, j]  # already zero due to normalization
+            factor = matrix[i, j]
             matrix[i] -= factor * matrix[j]
 
             # Set small values to zero based on tolerance
