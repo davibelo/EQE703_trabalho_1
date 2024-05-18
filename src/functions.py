@@ -242,39 +242,31 @@ def determinant_with_numpy(matrix):
     return np.linalg.det(matrix)
 
 @execution_time_decorator
-def determinant_with_pivoting_norm(matrix, tolerance=1E-6):
+def row_reduced_echelon_form(matrix, tolerance=1E-6):
     """
-    Calculate the determinant of a square matrix using the pivoting method,
-    and normalize pivots to 1 when possible, considering a tolerance for treating small numbers as zero.
+    Calculate the reduced matrix using the pivoting method, normalizing pivots to 1 when possible,
+    considering a tolerance for treating small numbers as zero.
 
     Parameters:
-    matrix (numpy.ndarray): A square matrix.
+    matrix (numpy.ndarray): A matrix.
     tolerance (float): The tolerance level for treating numbers as zero.
 
     Returns:
-    float or None: The determinant of the matrix. Returns None if the matrix is not square.
-    2D numpy array: The triangular matrix produced by the method
+    2D numpy array: The matrix in row-reduced echelon form.
 
     Raises:
-    ValueError: If the input matrix is not square or not a 2D numpy array.
+    ValueError: If the input matrix is not a 2D numpy array.
     """
 
     # Check if the input is a 2D numpy array
     if not isinstance(matrix, np.ndarray) or matrix.ndim != 2:
         raise ValueError("Input must be a 2D numpy array.")
 
-    # Check if the matrix is square
-    rows, cols = matrix.shape
-    if rows != cols:
-        raise ValueError("Input matrix must be square.")
-
     # Grant elements as float
     matrix = matrix.astype(float)
 
-    # Initialize determinant as 1
-    det = 1
-
     # Iterating over each column
+    rows, cols = matrix.shape
     for j in range(cols):
         # Select the pivot as the largest absolute value for numerical stability
         pivot_index = np.argmax(abs(matrix[j:, j])) + j
@@ -283,15 +275,13 @@ def determinant_with_pivoting_norm(matrix, tolerance=1E-6):
         # Swap the row with the highest pivot to the current row
         if pivot_index != j:
             matrix[[j, pivot_index]] = matrix[[pivot_index, j]]
-            det *= -1  # Changing rows changes the sign of the determinant
 
         # Consider pivot as zero if below the tolerance
         if abs(pivot) < tolerance:
-            return 0, matrix
+            return matrix
 
         # Normalize the pivot row (divide the row by the pivot element)
         matrix[j] = matrix[j] / pivot
-        det *= pivot  # Update determinant
 
         # Make elements below the pivot zero
         for i in range(j + 1, rows):
@@ -301,7 +291,7 @@ def determinant_with_pivoting_norm(matrix, tolerance=1E-6):
             # Set small values to zero based on tolerance
             matrix[i][abs(matrix[i]) < tolerance] = 0
 
-    return det, matrix
+    return matrix
 
 def newton_raphson_method(x0, func, d_func, tol=1e-6, max_iter=1000):
     """
