@@ -241,6 +241,7 @@ def determinant_with_pivoting(matrix, tolerance=1E-6):
 def determinant_with_numpy(matrix):
     return np.linalg.det(matrix)
 
+@execution_time_decorator
 def determinant_with_pivoting_norm(matrix, tolerance=1E-6):
     """
     Calculate the determinant of a square matrix using the pivoting method,
@@ -291,7 +292,7 @@ def determinant_with_pivoting_norm(matrix, tolerance=1E-6):
         # Normalize the pivot row (divide the row by the pivot element)
         matrix[j] = matrix[j] / pivot
         det *= pivot  # Update determinant
-        
+
         # Make elements below the pivot zero
         for i in range(j + 1, rows):
             factor = matrix[i, j]  # already zero due to normalization
@@ -301,3 +302,67 @@ def determinant_with_pivoting_norm(matrix, tolerance=1E-6):
             matrix[i][abs(matrix[i]) < tolerance] = 0
 
     return det, matrix
+
+def newton_raphson_method(x0, func, d_func, tol=1e-6, max_iter=1000):
+    """
+    Apply the Newton-Raphson method to find a root of a function.
+
+    Parameters:
+    - x0 (float): Initial guess for the root.
+    - func (callable): Function whose root is to be found. It must take a single argument.
+    - d_func (callable): Derivative of the function. It must take a single argument.
+    - tol (float): Tolerance for the convergence of the method. The method stops when the absolute difference between successive iterations is less than tol.
+    - max_iter (int): Maximum number of iterations to perform.
+
+    Returns:
+    - float: Approximation to the root rounded to 10 decimal places.
+
+    Raises:
+    - ValueError: If the derivative at any point is zero, as the Newton-Raphson method cannot proceed.
+    """
+    x = x0
+    for i in range(max_iter):
+        f_val = func(x)
+        df_val = d_func(x)
+        if df_val == 0:
+            raise ValueError("Derivative is zero. Newton-Raphson method fails.")
+        x_new = x - f_val / df_val
+        if abs(x_new - x) < tol:
+            return round(x_new, 10)
+        x = x_new
+    return round(x, 10)
+
+def find_all_roots_newton(func,
+                          d_func,
+                          start,
+                          end,
+                          num_initial_guesses,
+                          tol=1e-6):
+    """
+    Find all roots of a given function within a specified interval using the Newton-Raphson method.
+
+    Parameters:
+    - func (callable): Function for which the roots are to be found.
+    - d_func (callable): Derivative of the function.
+    - start (float): Starting point of the interval.
+    - end (float): Ending point of the interval.
+    - num_initial_guesses (int): Number of initial guesses to use, which are spaced evenly across the interval.
+    - tol (float): Tolerance for the convergence of the Newton-Raphson method.
+
+    Returns:
+    - list: A list of unique roots found within the interval, each rounded to 10 decimal places.
+
+    Notes:
+    - The function uses a simple method to avoid duplicates in the list of roots.
+    - If the derivative of the function is zero at any guess, that guess is skipped.
+    """
+    guesses = np.linspace(start, end, num_initial_guesses)
+    roots = []
+    for guess in guesses:
+        try:
+            root = newton_raphson_method(guess, func, d_func, tol)
+            if root not in roots:  # Simple check to avoid duplicates
+                roots.append(root)
+        except ValueError:
+            continue
+    return roots
