@@ -136,7 +136,10 @@ body .il { color: #666666 } /* Literal.Number.Integer.Long */
 <span class="normal">38</span>
 <span class="normal">39</span>
 <span class="normal">40</span>
-<span class="normal">41</span></pre></div></td><td class="code"><div><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span></pre></div></td><td class="code"><div><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">nbformat</span>
 <span class="kn">from</span> <span class="nn">nbconvert</span> <span class="kn">import</span> <span class="n">HTMLExporter</span>
 <span class="kn">from</span> <span class="nn">pygments</span> <span class="kn">import</span> <span class="n">highlight</span>
@@ -156,9 +159,12 @@ body .il { color: #666666 } /* Literal.Number.Integer.Long */
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">html_filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">highlighted_code</span><span class="p">)</span>
 
-<span class="c1"># Get a list of all .ipynb and .py files in the current directory</span>
+<span class="c1"># Get a list of all .ipynb files in the current directory</span>
 <span class="n">notebook_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.ipynb&#39;</span><span class="p">)]</span>
+
+<span class="c1"># Get a list of all .py files in the current directory and the src folder</span>
 <span class="n">python_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">)]</span>
+<span class="n">python_files</span> <span class="o">+=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">)]</span>
 
 <span class="c1"># Process each notebook file</span>
 <span class="k">for</span> <span class="n">notebook_file</span> <span class="ow">in</span> <span class="n">notebook_files</span><span class="p">:</span>

@@ -18,9 +18,12 @@ def convert_py_to_html(py_file):
     with open(html_filename, 'w') as f:
         f.write(highlighted_code)
 
-# Get a list of all .ipynb and .py files in the current directory
+# Get a list of all .ipynb files in the current directory
 notebook_files = [f for f in os.listdir('.') if f.endswith('.ipynb')]
+
+# Get a list of all .py files in the current directory and the src folder
 python_files = [f for f in os.listdir('.') if f.endswith('.py')]
+python_files += [os.path.join('src', f) for f in os.listdir('src') if f.endswith('.py')]
 
 # Process each notebook file
 for notebook_file in notebook_files:
@@ -39,4 +42,3 @@ for notebook_file in notebook_files:
 # Process each Python file
 for python_file in python_files:
     convert_py_to_html(python_file)
-
