@@ -13,18 +13,6 @@ def execution_time_decorator(func):
         return result
     return wrapper
 
-def display_as_dataframe(array):
-    """
-    Display a NumPy array as a pandas DataFrame.
-
-    Parameters:
-    array (numpy.ndarray): The NumPy array to be displayed.
-    """
-    # Create a DataFrame from the NumPy array
-    df = pd.DataFrame(array)
-
-    # Display the DataFrame
-    display(df)
 
 @execution_time_decorator
 def schmidt_machine(W, M=None):
@@ -293,7 +281,7 @@ def row_reduced_echelon_form(matrix, tolerance=1E-6):
 
     return matrix
 
-def newton_raphson_method(x0, func, d_func, tol=1e-6, max_iter=1000):
+def find_root_newton_raphson(x0, func, d_func, tol=1e-6, max_iter=1000):
     """
     Apply the Newton-Raphson method to find a root of a function.
 
@@ -350,7 +338,7 @@ def find_all_roots_newton(func,
     roots = []
     for guess in guesses:
         try:
-            root = newton_raphson_method(guess, func, d_func, tol)
+            root = find_root_newton_raphson(guess, func, d_func, tol)
             if root not in roots:  # Simple check to avoid duplicates
                 roots.append(root)
         except ValueError:
