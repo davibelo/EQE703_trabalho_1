@@ -16,6 +16,8 @@ for notebook_file in notebook_files:
 
     # Convert the notebook to HTML
     html_exporter = HTMLExporter()
+    html_exporter.exclude_output_prompt = True
+    html_exporter.exclude_input_prompt = True
     body, resources = html_exporter.from_notebook_node(notebook_content)
 
     # Save the HTML to a file with the same name but .html extension
